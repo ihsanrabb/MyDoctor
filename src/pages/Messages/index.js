@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { ListDoctor } from '../../components'
-import { colors } from '../../utils'
+import { colors, fonts } from '../../utils'
 
 const Messages = () => {
   return (
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontFamily: colors.text.primary,
+    fontFamily: fonts.primary[500],
     color: colors.text.primary,
     marginTop: 30,
     marginLeft: 16
