@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { ILCatObat, ILCatPsikiater, ILCatUmum } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
@@ -17,11 +17,11 @@ const DoctorCategory = (props) => {
     return <ILCatUmum style={styles.illustration} />
   }
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <Icon />
       <Text style={styles.label}>Saya butuh</Text>
       <Text style={styles.category}>{props.category}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

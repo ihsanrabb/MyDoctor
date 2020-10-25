@@ -1,17 +1,20 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { DummyDoctor2 } from '../../../assets'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { DummyDoctor2, IconNext } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
 const ListDoctor = (props) => {
   return (
-    <View style={styles.container}>
+    <TouchableOpacity style={styles.container} onPress={props.onPress}>
       <Image source={props.profile} style={styles.avatar} />
-      <View>
+      <View style={styles.content}>
         <Text style={styles.name}>{props.name}</Text>
         <Text style={styles.desc}>{props.desc}</Text>
       </View>
-    </View>
+      {
+        props.type == 'next' && <IconNext />
+      }
+    </TouchableOpacity>
   )
 }
 
@@ -23,7 +26,11 @@ const styles = StyleSheet.create({
     padding: 16,
     borderBottomWidth: 1,
     borderBottomColor: colors.border,
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between'
+  },
+  content: {
+    flex: 1
   },
   avatar: {
     width: 46,
