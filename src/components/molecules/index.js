@@ -6,6 +6,7 @@ import RatedDoctor from './RatedDoctor'
 import NewsItem from './NewsItem'
 import ListDoctor from './ListDoctor'
 import ListHospitals from './ListHospitals'
+import ChatItem from './ChatItem'
 
 export {
     Header,
@@ -15,5 +16,6 @@ export {
     RatedDoctor,
     NewsItem,
     ListDoctor,
-    ListHospitals
+    ListHospitals,
+    ChatItem
 }
