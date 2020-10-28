@@ -4,10 +4,10 @@ import { DummyDoctor1 } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 import { Button } from '../../atoms'
 
-const DarkProfile = () => {
+const DarkProfile = (props) => {
   return (
     <View style={styles.container}>
-      <Button type="icon-only" icon="back-light" />
+      <Button type="icon-only" icon="back-light" onPress={props.onPress} />
       <View style={styles.content}>
         <Text style={styles.name}>Gats</Text>
         <Text style={styles.desc}>Dokter Cinta</Text>
