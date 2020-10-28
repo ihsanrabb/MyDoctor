@@ -1,12 +1,26 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { DummyDoctor2, IconNext } from '../../../assets'
+import { IconEditProfile, IconHelp, IconLanguage, IconNext, IconRate } from '../../../assets'
 import { colors, fonts } from '../../../utils'
 
-const ListDoctor = (props) => {
+const List = (props) => {
+  const Icon = () => {
+    switch(props.icon) {
+      case 'edit-profile' :
+        return <IconEditProfile />
+      case 'language':
+        return <IconLanguage />
+      case 'rate':
+        return <IconRate />
+      case 'help':
+        return <IconHelp />
+      default: 
+      return <IconEditProfile />
+    }
+  }
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
-      <Image source={props.profile} style={styles.avatar} />
+      {props.type ? <Icon /> : <Image source={props.profile} style={styles.avatar} />}
       <View style={styles.content}>
         <Text style={styles.name}>{props.name}</Text>
         <Text style={styles.desc}>{props.desc}</Text>
@@ -18,7 +32,7 @@ const ListDoctor = (props) => {
   )
 }
 
-export default ListDoctor
+export default List
 
 const styles = StyleSheet.create({
   container: {
@@ -30,13 +44,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between'
   },
   content: {
-    flex: 1
+    flex: 1,
+    marginLeft: 16
   },
   avatar: {
     width: 46,
     height: 46,
-    borderRadius: 46 / 2,
-    marginRight: 16
+    borderRadius: 46 / 2
   },
   name: {
     fontSize: 16,
