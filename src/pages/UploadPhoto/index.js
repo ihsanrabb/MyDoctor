@@ -1,24 +1,54 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { IconAddPhoto, ILNullPhoto } from '../../assets'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { IconAddPhoto, IconRemovePhoto, ILNullPhoto } from '../../assets'
 import { Button, Gap, Header, Link } from '../../components'
 import { colors, fonts } from '../../utils'
+import ImagePicker from 'react-native-image-picker'
+import { showMessage } from "react-native-flash-message"
 
 const UploadPhoto = (props) => {
+  const [hasPhoto, setHasPhoto] = React.useState(false)
+  const [photo, setPhoto] = React.useState(ILNullPhoto)
+
+  const getImage = () => {
+    ImagePicker.showImagePicker({}, (response) => {
+      console.log('Response = ', response);
+      if (response.didCancel || response.error) {
+        console.log('User cancelled image picker');
+        showMessage({
+          message: 'Oops! anda tidak jadi memilih foto',
+          type: 'default',
+          backgroundColor: colors.error,
+          color: colors.white
+        })
+      } else {
+        const source = { uri: response.uri };
+        setPhoto(source)
+        setHasPhoto(true)
+      }
+    });
+
+  }
+
   return (
     <View style={styles.page}>
       <Header title="Upload Photo" />
       <View style={styles.content}>
         <View style={styles.profile}>
-          <View style={styles.avatarWrapper}>
-            <Image source={ILNullPhoto} style={styles.avatar} />
-            <IconAddPhoto style={styles.addPhoto} />
-          </View>
+          <TouchableOpacity style={styles.avatarWrapper} onPress={getImage}>
+            <Image source={photo} style={styles.avatar} />
+            {hasPhoto ? 
+              <IconRemovePhoto style={styles.addPhoto} />
+              :
+              <IconAddPhoto style={styles.addPhoto} />
+            }
+          </TouchableOpacity>
           <Text style={styles.name}>Ihsanuddin</Text>
           <Text style={styles.profession}>Chief Executive</Text>
         </View>
         <View>
           <Button 
+            disable={!hasPhoto}
             title="Upload and Continue" 
             onPress={() => props.navigation.replace('MainApp')}
           />
@@ -55,7 +85,8 @@ const styles = StyleSheet.create({
   },  
   avatar: {
     width: 110,
-    height: 110
+    height: 110,
+    borderRadius: 110 / 2
   },
   avatarWrapper: {
     width: 130,
