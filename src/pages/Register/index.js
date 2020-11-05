@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ScrollView ,StyleSheet, View } from 'react-native'
 import { Button, Header, Input, Gap, Loading } from '../../components'
-import { colors, useForm } from '../../utils'
+import { colors, getData, storeData, useForm } from '../../utils'
 import { Fire } from '../../config'
 import { showMessage, hideMessage } from "react-native-flash-message";
 
@@ -23,6 +23,16 @@ const Register = ({navigation}) => {
         console.log('register success', res)
         setLoading(false)
         setForm('reset')
+        const data = {
+          fullName: form.fullName,
+          profession: form.profession,
+          email: form.email
+        }
+        Fire.database()
+          .ref('users/' + res.user.uid + '/')
+          .set(data)
+        storeData('user', data)
+        navigation.navigate('UploadPhoto')
       })
       .catch((error) => {
         let errorMessage = error.message;
