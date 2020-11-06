@@ -26,13 +26,13 @@ const Register = ({navigation}) => {
         const data = {
           fullName: form.fullName,
           profession: form.profession,
-          email: form.email
+          email: form.email,
+          uid: res.user.uid
         }
         Fire.database()
           .ref('users/' + res.user.uid + '/')
           .set(data)
-        storeData('user', data)
-        navigation.navigate('UploadPhoto')
+        navigation.navigate('UploadPhoto', data)
       })
       .catch((error) => {
         let errorMessage = error.message;
