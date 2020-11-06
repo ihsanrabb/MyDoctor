@@ -2,16 +2,19 @@ import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { IconAddPhoto, IconRemovePhoto, ILNullPhoto } from '../../assets'
 import { Button, Gap, Header, Link } from '../../components'
-import { colors, fonts } from '../../utils'
+import { colors, fonts, storeData } from '../../utils'
 import ImagePicker from 'react-native-image-picker'
 import { showMessage } from "react-native-flash-message"
+import { Fire } from '../../config'
 
 const UploadPhoto = (props) => {
+  const { fullName, profession, uid } = props.route.params
   const [hasPhoto, setHasPhoto] = React.useState(false)
   const [photo, setPhoto] = React.useState(ILNullPhoto)
+  const [photoForDB, setPhotoForDB] = React.useState('')
 
   const getImage = () => {
-    ImagePicker.showImagePicker({}, (response) => {
+    ImagePicker.showImagePicker({quality: 0.7, maxWidth: 200, maxHeight: 200}, (response) => {
       console.log('Response = ', response);
       if (response.didCancel || response.error) {
         console.log('User cancelled image picker');
@@ -22,12 +25,24 @@ const UploadPhoto = (props) => {
           color: colors.white
         })
       } else {
+        setPhotoForDB(`data:${response.type};base64, ${response.data}`)
         const source = { uri: response.uri };
         setPhoto(source)
         setHasPhoto(true)
       }
     });
 
+  }
+
+  const uploadAndContinue = () => {
+    Fire.database()
+      .ref('users/' + uid + '/')
+      .update({photo: photoForDB})
+    const data = props.route.params
+    data.photo = photoForDB
+    storeData('user', data)
+
+    props.navigation.replace('MainApp')
   }
 
   return (
@@ -43,14 +58,14 @@ const UploadPhoto = (props) => {
               <IconAddPhoto style={styles.addPhoto} />
             }
           </TouchableOpacity>
-          <Text style={styles.name}>Ihsanuddin</Text>
-          <Text style={styles.profession}>Chief Executive</Text>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.profession}>{profession}</Text>
         </View>
         <View>
           <Button 
             disable={!hasPhoto}
             title="Upload and Continue" 
-            onPress={() => props.navigation.replace('MainApp')}
+            onPress={uploadAndContinue}
           />
           <Gap height={30} />
           <Link 
