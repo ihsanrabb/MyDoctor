@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { ScrollView ,StyleSheet, View } from 'react-native'
 import { Button, Header, Input, Gap, Loading } from '../../components'
-import { colors, getData, storeData, useForm } from '../../utils'
+import { colors, useForm, showError } from '../../utils'
 import { Fire } from '../../config'
-import { showMessage, hideMessage } from "react-native-flash-message";
 
 const Register = ({navigation}) => {
   const [form, setForm] = useForm({
@@ -15,12 +14,9 @@ const Register = ({navigation}) => {
   const [loading, setLoading] = useState(false)
 
   const onContinue = () => {
-    console.log('masok', form)
-
     setLoading(true)
     Fire.auth().createUserWithEmailAndPassword(form.email, form.password)
       .then((res) => {
-        console.log('register success', res)
         setLoading(false)
         setForm('reset')
         const data = {
@@ -34,15 +30,8 @@ const Register = ({navigation}) => {
           .set(data)
         navigation.navigate('UploadPhoto', data)
       })
-      .catch((error) => {
-        let errorMessage = error.message;
-        showMessage({
-          message: errorMessage,
-          type: 'default',
-          backgroundColor: colors.error,
-          color: colors.white
-        })
-        console.log('error register', errorMessage)
+      .catch((err) => {
+        showError(err.message)
         setLoading(false)
       });
   }
