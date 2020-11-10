@@ -20,6 +20,8 @@ const Input = (props) => {
         value={props.value}
         onChangeText={props.onChangeText}
         secureTextEntry={props.secureTextEntry}
+        editable={!props.disable}
+        selectTextOnFocus={!props.disable}
       />
     </View>
   )
