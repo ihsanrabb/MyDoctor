@@ -20,7 +20,7 @@ const List = (props) => {
   }
   return (
     <TouchableOpacity style={styles.container} onPress={props.onPress}>
-      {props.type ? <Icon /> : <Image source={props.profile} style={styles.avatar} />}
+      {props.icon ? <Icon /> : <Image source={props.profile} style={styles.avatar} />}
       <View style={styles.content}>
         <Text style={styles.name}>{props.name}</Text>
         <Text style={styles.desc}>{props.desc}</Text>
@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
   desc: {
     fontSize: 12,
     fontFamily: fonts.primary[300],
-    color: colors.text.secondary
+    color: colors.text.secondary,
+    textTransform: 'capitalize'
   }
 })
