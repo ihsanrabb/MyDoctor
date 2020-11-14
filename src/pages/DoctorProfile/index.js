@@ -3,16 +3,22 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, Gap, Header, Profile, ProfileItem } from '../../components'
 import { colors } from '../../utils'
 
-const DoctorProfile = ({navigation}) => {
+const DoctorProfile = ({navigation, route}) => {
+  const dataDoctor = route.params
+  
   return (
     <View style={styles.page}>
       <Header title="Doctor Profile" onPress={() => navigation.goBack()} />
       <ScrollView showsVerticalScrollIndicator={false}>
-        <Profile name="Nairobi" desc="Dokter Anak" />
+        <Profile 
+          name={dataDoctor.data.fullName} 
+          desc={dataDoctor.data.profession} 
+          photo={{uri: dataDoctor.data.photo}}  
+        />
         <Gap height={10} />
-        <ProfileItem label="Alumnus" value="UPNVJ" />
-        <ProfileItem label="Tempat Praktik" value="Rumah Sendiri" />
-        <ProfileItem label="NO. STR" value="0000000123123" />
+        <ProfileItem label="Alumnus" value={dataDoctor.data.university} />
+        <ProfileItem label="Tempat Praktik" value={dataDoctor.data.hospital_address} />
+        <ProfileItem label="NO. STR" value={dataDoctor.data.str_number} />
         <Gap height={33} />
         <View style={styles.action}>
           <Button 
