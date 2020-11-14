@@ -11,6 +11,13 @@ const Button = (props)  => {
   if(props.type === 'icon-only') {
     return <IconOnly icon={props.icon} onPress={props.onPress} />
   }
+  if(props.disable) {
+    return (
+      <View style={styles.disableBg}>
+        <Text style={styles.disableText}>{props.title}</Text>
+      </View>
+    )
+  }
   return (
     <TouchableOpacity style={styles.container(props.type)} onPress={props.onPress}>
       <Text style={styles.text(props.type)}>{props.title}</Text>
@@ -26,10 +33,21 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 10
   }),
+  disableBg: {
+    paddingVertical: 10,
+    borderRadius: 10,
+    backgroundColor: colors.button.disable.background
+  },
   text: (type) => ({
     fontSize: 18,
     fontFamily: fonts.primary[600],
     textAlign: 'center',
     color: type === 'secondary' ? colors.button.secondary.text : colors.button.primary.text
-  })
+  }),
+  disableText: {
+    fontSize: 18,
+    fontFamily: fonts.primary[600],
+    textAlign: 'center',
+    color: colors.button.disable.text
+  },
 })

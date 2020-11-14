@@ -1,26 +1,63 @@
 import React from 'react'
-import { Image, StyleSheet, Text, View } from 'react-native'
-import { IconAddPhoto, ILNullPhoto } from '../../assets'
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { IconAddPhoto, IconRemovePhoto, ILNullPhoto } from '../../assets'
 import { Button, Gap, Header, Link } from '../../components'
-import { colors, fonts } from '../../utils'
+import { colors, fonts, storeData, showError } from '../../utils'
+import ImagePicker from 'react-native-image-picker'
+import { Fire } from '../../config'
 
 const UploadPhoto = (props) => {
+  const { fullName, profession, uid } = props.route.params
+  const [hasPhoto, setHasPhoto] = React.useState(false)
+  const [photo, setPhoto] = React.useState(ILNullPhoto)
+  const [photoForDB, setPhotoForDB] = React.useState('')
+
+  const getImage = () => {
+    ImagePicker.showImagePicker({quality: 0.7, maxWidth: 200, maxHeight: 200}, (response) => {
+      console.log('Response = ', response);
+      if (response.didCancel || response.error) {
+        showError('Oops! anda tidak jadi memilih foto')
+      } else {
+        setPhotoForDB(`data:${response.type};base64, ${response.data}`)
+        const source = { uri: response.uri };
+        setPhoto(source)
+        setHasPhoto(true)
+      }
+    })
+  }
+
+  const uploadAndContinue = () => {
+    Fire.database()
+      .ref('users/' + uid + '/')
+      .update({photo: photoForDB})
+    const data = props.route.params
+    data.photo = photoForDB
+    storeData('user', data)
+
+    props.navigation.replace('MainApp')
+  }
+
   return (
     <View style={styles.page}>
       <Header title="Upload Photo" />
       <View style={styles.content}>
         <View style={styles.profile}>
-          <View style={styles.avatarWrapper}>
-            <Image source={ILNullPhoto} style={styles.avatar} />
-            <IconAddPhoto style={styles.addPhoto} />
-          </View>
-          <Text style={styles.name}>Ihsanuddin</Text>
-          <Text style={styles.profession}>Chief Executive</Text>
+          <TouchableOpacity style={styles.avatarWrapper} onPress={getImage}>
+            <Image source={photo} style={styles.avatar} />
+            {hasPhoto ? 
+              <IconRemovePhoto style={styles.addPhoto} />
+              :
+              <IconAddPhoto style={styles.addPhoto} />
+            }
+          </TouchableOpacity>
+          <Text style={styles.name}>{fullName}</Text>
+          <Text style={styles.profession}>{profession}</Text>
         </View>
         <View>
           <Button 
+            disable={!hasPhoto}
             title="Upload and Continue" 
-            onPress={() => props.navigation.replace('MainApp')}
+            onPress={uploadAndContinue}
           />
           <Gap height={30} />
           <Link 
@@ -55,7 +92,8 @@ const styles = StyleSheet.create({
   },  
   avatar: {
     width: 110,
-    height: 110
+    height: 110,
+    borderRadius: 110 / 2
   },
   avatarWrapper: {
     width: 130,
