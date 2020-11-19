@@ -9,10 +9,10 @@ const DarkProfile = (props) => {
     <View style={styles.container}>
       <Button type="icon-only" icon="back-light" onPress={props.onPress} />
       <View style={styles.content}>
-        <Text style={styles.name}>Gats</Text>
-        <Text style={styles.desc}>Dokter Cinta</Text>
+        <Text style={styles.name}>{props.title}</Text>
+        <Text style={styles.desc}>{props.desc}</Text>
       </View>
-      <Image source={DummyDoctor1} style={styles.avatar} />
+      <Image source={props.photo} style={styles.avatar} />
     </View>
   )
 }
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
   avatar: {
     width: 46,
     height: 46,
-    borderBottomRightRadius: 46 / 2
+    borderRadius: 46 / 2,
   },
   name: {
     fontSize: 20,
