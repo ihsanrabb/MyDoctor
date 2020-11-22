@@ -13,11 +13,13 @@ const Messages = ({navigation}) => {
     const rootDB = Fire.database().ref()
     const urlHistory = `messages/${user.uid}/`
     const messageDB = rootDB.child(urlHistory)
+
     messageDB.on('value', async snapshot => {
       if(snapshot.val()) {
         const oldData = snapshot.val()
         const data = []
-        const promise = await Object.keys(oldData).map(async (key) => {
+
+        const promises = await Object.keys(oldData).map(async (key) => {
           const urlUidDoctor = `doctors/${oldData[key].uidPartner}`
           const detailDoctor = await rootDB.child(urlUidDoctor).once('value')
           data.push({
@@ -27,11 +29,11 @@ const Messages = ({navigation}) => {
           })
         })
 
-        await Promise.all(promise)
+        await Promise.all(promises)
         setHistoryChat(data)
       }
     })
-  }, [])
+  }, [user.uid])
 
   const getDataUserFromLocal = () => {
     getData('user')
